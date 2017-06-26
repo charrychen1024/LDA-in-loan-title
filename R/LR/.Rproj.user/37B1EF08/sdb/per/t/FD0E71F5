@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(RODBC)\n\n#从mysql中读取数据\nconn <- odbcConnect('mysqlodbc','root','charrychen')\nloandata_all <- sqlFetch(conn,'loandata_clean')\nclose(conn)\nas.data.frame(loandata_all)\n\n#删除无用列\nloandata_all <- loandata_all[,-c(1,2,3)]\n\n#转换数据类型\nloandata_all$loan_status <- as.factor(loandata_all$loan_status)\nloandata_all$marital_status <- as.factor(loandata_all$marital_status)\nloandata_all$house <- as.factor(loandata_all$house)\nloandata_all$house_loan <- as.factor(loandata_all$house_loan)\nloandata_all$car <- as.factor(loandata_all$car)\nloandata_all$car_loan <- as.factor(loandata_all$car_loan)\nloandata_all$company_scale <- as.factor(loandata_all$company_scale)\nloandata_all$company_type <- as.factor(loandata_all$company_type)\nloandata_all$workcity <- as.factor(loandata_all$workcity)\nloandata_all$credit_report <- as.factor(loandata_all$credit_report)\nloandata_all$identity_authentication <- as.factor(loandata_all$identity_authentication)\nloandata_all$job_authentication <- as.factor(loandata_all$job_authentication)\nloandata_all$income_authentication <- as.factor(loandata_all$income_authentication)\nloandata_all$site_authentication <- as.factor(loandata_all$site_authentication)\n\n#按借款和还款状态分类\nloandata_all_borrow <- loandata_all\nloandata_all_repay <- loandata_all\n\nloandata_all_borrow$borrow_result <- ifelse(loandata_all$loan_status=='0',0,1)\nloandata_all_repay$repay_result <- ifelse(loandata_all$loan_status=='3',0,ifelse(loandata_all$loan_status=='2',1,NA))\n\nloandata_all_borrow$borrow_result <- as.factor(loandata_all_borrow$borrow_result)\nloandata_all_repay$repay_result <- as.factor(loandata_all_repay$repay_result)\nloandata_all_borrow <- loandata_all_borrow[,-4]\nloandata_all_repay <- loandata_all_repay[,-4]\n\nloandata_all_repay <- na.omit(loandata_all_repay) #删除缺失值\n\n#数据标准化\n\n\n#抽样\nloandata_all_repay_yes <- loandata_all_repay[loandata_all_repay$repay_result=='1',]\nloandata_all_repay_no <- loandata_all_repay[loandata_all_repay$repay_result=='0',]\n\nnum_samples <- 156\nsamples <- sample(nrow(loandata_all_repay_yes),num_samples)\nloandata_repay_new <- rbind(loandata_all_repay_no,loandata_all_repay_yes[samples,])\n\n#逻辑回归\nlr_borrow <- glm(borrow_result~.,data = loandata_borrow,family = 'binomial')\nsummary(lr_borrow)\n\nlr_repay <- glm(repay_result~.,data = loandata_repay_new,family = 'binomial')\nsummary(lr_repay)",
+    "created" : 1498439958823.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2010030368",
+    "id" : "FD0E71F5",
+    "lastKnownWriteTime" : 1498445503,
+    "last_content_update" : 1498445503125,
+    "path" : "D:/School/Python/FinalPaperExperiment/R/LR/data_extract.R",
+    "project_path" : "data_extract.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

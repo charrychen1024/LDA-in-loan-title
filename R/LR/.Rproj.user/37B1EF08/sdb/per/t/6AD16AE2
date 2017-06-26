@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#读取数据\nloandata_borrow <- read.csv('../../output/loandata_borrow_std.csv')\nloandata_repay <- read.csv('../../output/loandata_repay_std.csv')\nloandata_borrow <- loandata_borrow[,-1]\nloandata_repay <- loandata_repay[,-1]\n#数据摘要\nsummary(loandata_borrow)\n#查看数据类型\nstr(loandata_borrow)\n#转换数据类型\nloandata_borrow$marital_status = as.factor(loandata_borrow$marital_status)\nloandata_borrow$house = as.factor(loandata_borrow$house)\nloandata_borrow$house_loan = as.factor(loandata_borrow$house_loan)\nloandata_borrow$car = as.factor(loandata_borrow$car)\nloandata_borrow$car_loan = as.factor(loandata_borrow$car_loan)\nloandata_borrow$company_type = as.factor(loandata_borrow$company_type)\nloandata_borrow$company_scale = as.factor(loandata_borrow$company_scale)\nloandata_borrow$workcity = as.factor(loandata_borrow$workcity)\nloandata_borrow$credit_report = as.factor(loandata_borrow$credit_report)\nloandata_borrow$identity_authentication = as.factor(loandata_borrow$identity_authentication)\nloandata_borrow$job_authentication = as.factor(loandata_borrow$job_authentication)\nloandata_borrow$income_authentication = as.factor(loandata_borrow$income_authentication)\nloandata_borrow$site_authentication = as.factor(loandata_borrow$site_authentication)\nloandata_borrow$topic = as.factor(loandata_borrow$topic)\nloandata_borrow$borrow_result = as.factor(loandata_borrow$borrow_result)\n\nloandata_repay$marital_status = as.factor(loandata_repay$marital_status)\nloandata_repay$house = as.factor(loandata_repay$house)\nloandata_repay$house_loan = as.factor(loandata_repay$house_loan)\nloandata_repay$car = as.factor(loandata_repay$car)\nloandata_repay$car_loan = as.factor(loandata_repay$car_loan)\nloandata_repay$company_type = as.factor(loandata_repay$company_type)\nloandata_repay$company_scale = as.factor(loandata_repay$company_scale)\nloandata_repay$workcity = as.factor(loandata_repay$workcity)\nloandata_repay$credit_report = as.factor(loandata_repay$credit_report)\nloandata_repay$identity_authentication = as.factor(loandata_repay$identity_authentication)\nloandata_repay$job_authentication = as.factor(loandata_repay$job_authentication)\nloandata_repay$income_authentication = as.factor(loandata_repay$income_authentication)\nloandata_repay$site_authentication = as.factor(loandata_repay$site_authentication)\nloandata_repay$topic = as.factor(loandata_repay$topic)\nloandata_repay$repay_result = as.factor(loandata_repay$repay_result)\n\n#对还款数据进行重抽样，平衡不同还款结果之间的比例\ntable(loandata_repay$repay_result)\nloandata_repay_yes <- loandata_repay[loandata_repay$repay_result=='1',]\nloandata_repay_no <- loandata_repay[loandata_repay$repay_result=='0',]\nnum_samples = 410\nsamples <- sample(nrow(loandata_repay_yes),num_samples)\nloandata_repay_new <- rbind(loandata_repay_yes[samples,],loandata_repay_no)\n\n\n#逻辑回归\nlr_borrow <- glm(borrow_result~.,data = loandata_borrow,family = 'binomial')\nsummary(lr_borrow)\n\nlr_repay <- glm(repay_result~.,data = loandata_repay_new,family = 'binomial')\nsummary(lr_repay)\n",
+    "created" : 1498379507423.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2745400958",
+    "id" : "6AD16AE2",
+    "lastKnownWriteTime" : 1498401586,
+    "last_content_update" : 1498401586762,
+    "path" : "D:/School/Python/FinalPaperExperiment/R/LR/title.R",
+    "project_path" : "title.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
